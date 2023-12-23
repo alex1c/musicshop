@@ -39,7 +39,7 @@ const upload = () => {
             //body: formData,
         });
 
-        console.log("---responce", response);
+      //  console.log("---responce", response);
 
         if (response.status == 200) {
             setResult("Прайс удален");

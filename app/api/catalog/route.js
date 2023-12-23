@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 //import { useRouter } from "next/navigation";
 //import sendReport from "./helper";
 //import setValue from '.../admin/upload/page'
-import connectString from "@/app/db";
+//import connectString from "@/app/db";
 
 
 //не работает. Вместо общей сделал в каждом методе
@@ -91,7 +91,7 @@ export async function DELETE(Request) {
 
 export async function GET(Request) {
     // var myHeaders = new Headers();
-    //console.log("Request---", Request);
+   // console.log("Request---", Request);
 
     // myHeaders.append("Content-Type", "text/plain; charset=windows 1251");
     //читаем прайс в локальном каталоге. Он должен быть переведен в кодировку UTF8
