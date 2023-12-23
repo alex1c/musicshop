@@ -5,10 +5,13 @@ import { redirect } from "next/navigation";
 //import { useRouter } from "next/navigation";
 //import sendReport from "./helper";
 //import setValue from '.../admin/upload/page'
+import connectString from "@/app/db";
 
+
+//не работает. Вместо общей сделал в каждом методе
 async function handler(arrayOfObjectForMongoDB) {
     const client = await MongoClient.connect(
-        "mongodb+srv://alex1cspb:4VWWdH31VLw6SN62@lutner.vfkxvei.mongodb.net/lutnerdatabase"
+        process.env.dbConnect
     );
     const db = client.db();
     const collection = db.collection("pricecollection");
@@ -48,9 +51,27 @@ async function handler(arrayOfObjectForMongoDB) {
 }
 
 export async function DELETE(Request) {
-    console.log("Request---", Request);
+    //console.log("Request---", Request);
 
-    // const router = useRouter();
+    const client = await MongoClient.connect(
+       // "mongodb+srv://alex1cspb:4VWWdH31VLw6SN62@lutner.vfkxvei.mongodb.net/lutnerdatabase"
+       //connectString.toString()
+       process.env.dbConnect
+    );
+    const db = client.db();
+    const collection = db.collection("pricecollection");
+
+    const response = new Response();
+
+    const result = await collection
+        .deleteMany({})
+        .then((value) => response.text);
+    //console.log("response----", response);
+
+    //response.json = result.deletedCount;
+    return response;
+
+    //ниже не работает. Нужен был возврат резулттата . С редиректом были траблы. Сделал так
 
     let arrayOfObjectForMongoDB = new Array();
 
@@ -58,8 +79,7 @@ export async function DELETE(Request) {
     //     console.log("value----", value).then(redirect(`/admin/upload?p=${value}`));
     let res = handler(arrayOfObjectForMongoDB).then((value) => {
         redirect(`/admin/upload?p=${value.deletedCount}`);
-        //sendReport(value);
-        //setValue()
+
         //здесь { acknowledged: true, deletedCount: 0 }
     });
     // .then(redirect(`/admin/upload?p=${value}`));
@@ -71,7 +91,7 @@ export async function DELETE(Request) {
 
 export async function GET(Request) {
     // var myHeaders = new Headers();
-    console.log("Request---", Request);
+    //console.log("Request---", Request);
 
     // myHeaders.append("Content-Type", "text/plain; charset=windows 1251");
     //читаем прайс в локальном каталоге. Он должен быть переведен в кодировку UTF8
@@ -88,7 +108,7 @@ export async function GET(Request) {
     // console.log(data)
 
     //разбиваем прайс сначала построчно и потом каждую строку кладем в массив по точке с запятой
-    function parse(price) {
+    async function parse(price) {
         //console.log(price);
 
         const csvData = [];
@@ -163,7 +183,19 @@ export async function GET(Request) {
 
         //const req = {heading: 'head', description: 'desc'}
 
-        handler(arrayOfObjectForMongoDB);
+        const client = await MongoClient.connect(
+            process.env.dbConnect
+        );
+        const db = client.db();
+        const collection = db.collection("pricecollection");
+
+        const result = await collection.insertMany(arrayOfObjectForMongoDB);
+
+        //console.log('result-----',result)
+        return result;
+
+        //без хендлера все в однм месте
+        // handler(arrayOfObjectForMongoDB);
         //res.then((res) => res.json())
         //console.log("result-----", res);
         // console.log("---", dat);
@@ -171,7 +203,7 @@ export async function GET(Request) {
 
     //сделать возврат результата на вызывающую страницу
     // redirect(`/admin/upload?p=${dat}`);
-    redirect("/admin/upload");
+    //redirect("/admin/upload");
 
-    return NextResponse.json({ message: "dat" });
+    return NextResponse.json({ message: 'result' });
 }
