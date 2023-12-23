@@ -5,7 +5,7 @@ import Menu from "@/components/Menu";
 import React, { useState, useEffect } from "react";
 import { FormEvent } from 'react'
 
-const upload = () => {
+ const upload = () => {
     const [domLoaded, setDomLoaded] = useState(false);
 
     // useEffect(() => {
@@ -73,3 +73,11 @@ const upload = () => {
 };
 
 export default upload;
+
+// export function setValue(params) {
+
+//     console.log("45454")
+    
+// }
+
+

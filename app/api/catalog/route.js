@@ -1,10 +1,10 @@
-'use client'
-
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 //import price from '../../price/lutner_new.csv'
 import { redirect } from "next/navigation";
-import { useRouter } from 'next/navigation'
+//import { useRouter } from "next/navigation";
+//import sendReport from "./helper";
+//import setValue from '.../admin/upload/page'
 
 async function handler(arrayOfObjectForMongoDB) {
     const client = await MongoClient.connect(
@@ -15,12 +15,12 @@ async function handler(arrayOfObjectForMongoDB) {
 
     //delete
     if (arrayOfObjectForMongoDB.length === 0) {
-       // try {
-            const result = await collection.deleteMany({});
-            return result;
-       // } catch (e) {
-         //   console.log("Ошибка при удалении ", e);
-       // }
+        // try {
+        const result = await collection.deleteMany({});
+        return result;
+        // } catch (e) {
+        //   console.log("Ошибка при удалении ", e);
+        // }
     } else {
         // const result = await collection.insertOne({heading, description, done})
         const result = await collection.insertMany(arrayOfObjectForMongoDB);
@@ -50,14 +50,16 @@ async function handler(arrayOfObjectForMongoDB) {
 export async function DELETE(Request) {
     console.log("Request---", Request);
 
-    const router = useRouter()
+    // const router = useRouter();
 
     let arrayOfObjectForMongoDB = new Array();
 
     // let res = handler(arrayOfObjectForMongoDB).then((value) => {
     //     console.log("value----", value).then(redirect(`/admin/upload?p=${value}`));
     let res = handler(arrayOfObjectForMongoDB).then((value) => {
-        router.push(`/admin/upload?p=${value}`);
+        redirect(`/admin/upload?p=${value.deletedCount}`);
+        //sendReport(value);
+        //setValue()
         //здесь { acknowledged: true, deletedCount: 0 }
     });
     // .then(redirect(`/admin/upload?p=${value}`));
