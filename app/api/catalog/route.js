@@ -74,52 +74,96 @@ export async function GET(Request, Response) {
                 //for (let k = 0; k < 200; k++) {
                 if (csvData[k].length == 41) {
                     console.log("csvData[k]-------------", csvData[k]);
-                    for (let t = 0; t < csvData[k].length; t++) {
+                   // for (let t = 0; t < csvData[k].length; t++) {
                         try {
                             //  for (let t = 0; t < 100; t++) {
                             const priceString = {
-                                _id: csvData[t][0],
-                                IE_NAME: csvData[t][1],
-                                IE_PREVIEW_TEXT: csvData[t][2],
+
+                                _id: csvData[k][0],
+                                IE_NAME: csvData[k][1],
+                                IE_PREVIEW_TEXT: csvData[k][2],
                                 IE_DETAIL_PICTURE:
-                                    "http://www.lutner.ru" + csvData[t][3],
-                                CP_QUANTITY: csvData[t][4], //Остаток
-                                IP_PROP134: csvData[t][5], //Количество струн
-                                IP_PROP140: csvData[t][6], //Актуальность товара (Снят с производства)
-                                IP_PROP113: csvData[t][7], //Тип губной гармошки
-                                IP_PROP112: csvData[t][8], //Количество частей у блок-флейт
-                                IP_PROP114: csvData[t][9], //Производитель
-                                IP_PROP111: csvData[t][10], //Тип блок-флейты
-                                IP_PROP121: csvData[t][11], //Цвет1
-                                IP_PROP96: csvData[t][12], //Артикул
-                                IP_PROP99: csvData[t][13], //Единица измерения
-                                IP_PROP127: csvData[t][14], //Не используется
-                                IP_PROP100: csvData[t][15], //Ставка НДС
-                                IP_PROP97: csvData[t][16], //Не используется
-                                IP_PROP95: csvData[t][17], //Штрих код
-                                IP_PROP122: csvData[t][18], //Верхняя дека
-                                IP_PROP123: csvData[t][19], //Тональность
-                                IP_PROP149: csvData[t][20], //Не используется
-                                IP_PROP106: csvData[t][21], //вес брутто
-                                IP_PROP107: csvData[t][22], //Объем
-                                IP_PROP165: csvData[t][23], //Мощность
-                                IP_PROP110: csvData[t][24], //Высота звучания
-                                IC_GROUP0: csvData[t][25], //Группа1
-                                IC_GROUP1: csvData[t][26], //Группа2
-                                IC_GROUP2: csvData[t][27], //Группа3
-                                IP_PROP131: csvData[t][28], //Размер
-                                IP_PROP142: csvData[t][29], //Ширина верхнего порожка
-                                IP_PROP153: csvData[t][30], //Диаметр
-                                IP_PROP139: csvData[t][31], //Цвет2
-                                CV_PRICE_13: csvData[t][32], //Цена дилер
-                                IP_PROP152: csvData[t][33], //Материал обмотки
-                                CV_CURRENCY_13: csvData[t][34], //Валюта
-                                IP_PROP176: csvData[t][35], //Хит продаж
-                                IP_PROP150: csvData[t][36], //Диаметр первой струны
-                                CV_PRICE_18: csvData[t][37], //Цена розница
-                                CV_CURRENCY_18: csvData[t][38], //Валюта
-                                CV_PRICE_20: csvData[t][39], //Цена МП
-                                CV_CURRENCY_20: csvData[t][40], //Валюта
+                                    "http://www.lutner.ru" + csvData[k][3],
+                                CP_QUANTITY: csvData[k][4], //Остаток
+                                IP_PROP134: csvData[k][5], //Количество струн
+                                IP_PROP140: csvData[k][6], //Актуальность товара (Снят с производства)
+                                IP_PROP113: csvData[k][7], //Тип губной гармошки
+                                IP_PROP112: csvData[k][8], //Количество частей у блок-флейт
+                                IP_PROP114: csvData[k][9], //Производитель
+                                IP_PROP111: csvData[k][10], //Тип блок-флейты
+                                IP_PROP121: csvData[k][11], //Цвет1
+                                IP_PROP96: csvData[k][12], //Артикул
+                                IP_PROP99: csvData[k][13], //Единица измерения
+                                IP_PROP127: csvData[k][14], //Не используется
+                                IP_PROP100: csvData[k][15], //Ставка НДС
+                                IP_PROP97: csvData[k][16], //Не используется
+                                IP_PROP95: csvData[k][17], //Штрих код
+                                IP_PROP122: csvData[k][18], //Верхняя дека
+                                IP_PROP123: csvData[k][19], //Тональность
+                                IP_PROP149: csvData[k][20], //Не используется
+                                IP_PROP106: csvData[k][21], //вес брутто
+                                IP_PROP107: csvData[k][22], //Объем
+                                IP_PROP165: csvData[k][23], //Мощность
+                                IP_PROP110: csvData[k][24], //Высота звучания
+                                IC_GROUP0: csvData[k][25], //Группа1
+                                IC_GROUP1: csvData[k][26], //Группа2
+                                IC_GROUP2: csvData[k][27], //Группа3
+                                IP_PROP131: csvData[k][28], //Размер
+                                IP_PROP142: csvData[k][29], //Ширина верхнего порожка
+                                IP_PROP153: csvData[k][30], //Диаметр
+                                IP_PROP139: csvData[k][31], //Цвет2
+                                CV_PRICE_13: csvData[k][32], //Цена дилер
+                                IP_PROP152: csvData[k][33], //Материал обмотки
+                                CV_CURRENCY_13: csvData[k][34], //Валюта
+                                IP_PROP176: csvData[k][35], //Хит продаж
+                                IP_PROP150: csvData[k][36], //Диаметр первой струны
+                                CV_PRICE_18: csvData[k][37], //Цена розница
+                                CV_CURRENCY_18: csvData[k][38], //Валюта
+                                CV_PRICE_20: csvData[k][39], //Цена МП
+                                CV_CURRENCY_20: csvData[k][40], //Валюта
+
+                                // _id: csvData[t][0],
+                                // IE_NAME: csvData[t][1],
+                                // IE_PREVIEW_TEXT: csvData[t][2],
+                                // IE_DETAIL_PICTURE:
+                                //     "http://www.lutner.ru" + csvData[t][3],
+                                // CP_QUANTITY: csvData[t][4], //Остаток
+                                // IP_PROP134: csvData[t][5], //Количество струн
+                                // IP_PROP140: csvData[t][6], //Актуальность товара (Снят с производства)
+                                // IP_PROP113: csvData[t][7], //Тип губной гармошки
+                                // IP_PROP112: csvData[t][8], //Количество частей у блок-флейт
+                                // IP_PROP114: csvData[t][9], //Производитель
+                                // IP_PROP111: csvData[t][10], //Тип блок-флейты
+                                // IP_PROP121: csvData[t][11], //Цвет1
+                                // IP_PROP96: csvData[t][12], //Артикул
+                                // IP_PROP99: csvData[t][13], //Единица измерения
+                                // IP_PROP127: csvData[t][14], //Не используется
+                                // IP_PROP100: csvData[t][15], //Ставка НДС
+                                // IP_PROP97: csvData[t][16], //Не используется
+                                // IP_PROP95: csvData[t][17], //Штрих код
+                                // IP_PROP122: csvData[t][18], //Верхняя дека
+                                // IP_PROP123: csvData[t][19], //Тональность
+                                // IP_PROP149: csvData[t][20], //Не используется
+                                // IP_PROP106: csvData[t][21], //вес брутто
+                                // IP_PROP107: csvData[t][22], //Объем
+                                // IP_PROP165: csvData[t][23], //Мощность
+                                // IP_PROP110: csvData[t][24], //Высота звучания
+                                // IC_GROUP0: csvData[t][25], //Группа1
+                                // IC_GROUP1: csvData[t][26], //Группа2
+                                // IC_GROUP2: csvData[t][27], //Группа3
+                                // IP_PROP131: csvData[t][28], //Размер
+                                // IP_PROP142: csvData[t][29], //Ширина верхнего порожка
+                                // IP_PROP153: csvData[t][30], //Диаметр
+                                // IP_PROP139: csvData[t][31], //Цвет2
+                                // CV_PRICE_13: csvData[t][32], //Цена дилер
+                                // IP_PROP152: csvData[t][33], //Материал обмотки
+                                // CV_CURRENCY_13: csvData[t][34], //Валюта
+                                // IP_PROP176: csvData[t][35], //Хит продаж
+                                // IP_PROP150: csvData[t][36], //Диаметр первой струны
+                                // CV_PRICE_18: csvData[t][37], //Цена розница
+                                // CV_CURRENCY_18: csvData[t][38], //Валюта
+                                // CV_PRICE_20: csvData[t][39], //Цена МП
+                                // CV_CURRENCY_20: csvData[t][40], //Валюта
                             };
                             arrayOfObjectForMongoDB.push(priceString);
 
@@ -133,7 +177,7 @@ export async function GET(Request, Response) {
                                 csvData[k]
                             );
                         }
-                    }
+                   // }
                 }
             }
 
