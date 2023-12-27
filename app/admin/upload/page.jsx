@@ -5,49 +5,68 @@ import Menu from "@/components/Menu";
 import React, { useState, useEffect } from "react";
 //import { FormEvent } from 'react'
 
+// после загрузки не отображает количестов товара. Что то с асинхронностью
 const upload = () => {
-   
-
     const [result, setResult] = useState("");
-    
+    const [count, setCount] = useState("");
+
+    async function getCountItems() {
+        const responseCount = await fetch("/api/catalog?type=count", {
+            method: "GET",
+            // body: formData,
+        });
+
+        // console.log(
+        //     "responseCount-----===",
+        //     responseCount.headers.get("countItems")
+        // );
+
+        if (responseCount.status == 200) {
+            setCount(
+                "В базе товаров " + responseCount.headers.get("countItems")
+            );
+        } else {
+            setCount("Товары не посчитаны. Ошибка(");
+        }
+    }
+
+    useEffect(() => {
+        getCountItems();
+    }, [result]);
 
     async function onSubmit(FormEvent) {
         FormEvent.preventDefault();
 
-        const formData = new FormData(FormEvent.currentTarget);
-        const response = await fetch("/api/catalog", {
+        //const formData = new FormData(FormEvent.currentTarget);
+        const response = await fetch("/api/catalog?type=upload", {
             method: "GET",
-            // body: formData,
         });
 
         //console.log('response-----===', response)
 
         if (response.status == 200) {
             setResult("Прайс загружен");
+            getCountItems();
         } else {
             setResult("Прайс не загружен. Ошибка(");
         }
-       
     }
 
     async function onSubmitDelete(FormEvent) {
         FormEvent.preventDefault();
 
-       
         const response = await fetch("/api/catalog", {
             method: "DELETE",
-            //body: formData,
         });
 
-      //  console.log("---responce", response);
+        //  console.log("---responce", response);
 
         if (response.status == 200) {
             setResult("Прайс удален");
+            setCount("");
         } else {
             setResult("Прайс не удален. Ошибка(");
         }
-
-        
     }
 
     return (
@@ -63,7 +82,9 @@ const upload = () => {
                         Upload price
                     </button>
                 </form>
-                <span>{result}</span>
+                <span>
+                    {result} {count}
+                </span>
                 <form onSubmit={onSubmitDelete}>
                     <button
                         type="submit"
