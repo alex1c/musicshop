@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 //import price from '../../price/lutner_new.csv'
-import { redirect } from "next/navigation";
-//import { useRouter } from "next/navigation";
-//import sendReport from "./helper";
-//import setValue from '.../admin/upload/page'
-//import connectString from "@/app/db";
+//import { redirect } from "next/navigation";
 
+//удаление всего прайса
 export async function DELETE(Request) {
     //console.log("Request---", Request);
 
@@ -25,17 +22,18 @@ export async function DELETE(Request) {
     return response;
 }
 
+//основная функция получения данных. далее по параметрам делим ее
 export async function GET(Request, Response) {
     // var myHeaders = new Headers();
     //console.log("Request---", Request);
 
     const query = Request.nextUrl.searchParams.get("type");
 
-    //console.log("reqType---", query);
-
     let resultCount; //чтобы общая видимость была
 
-    // if (Request.nextUrl.searchParams.get("type").search("upload") != -1) {
+    //----------------------
+    //----------------------
+    //загрузка прайса
     if (query == "upload") {
         // myHeaders.append("Content-Type", "text/plain; charset=windows 1251");
         //читаем прайс в локальном каталоге. Он должен быть переведен в кодировку UTF8
@@ -60,7 +58,7 @@ export async function GET(Request, Response) {
             //console.log('lines------------------',lines)   //массив строк прайса
 
             //for (let i = 0; i < lines.length; i++) {
-            for (let i = 0; i < 300; i++) {
+            for (let i = 0; i < 10000; i++) {
                 csvData[i] = lines[i].split(";"); //массис массивов. В каждом массиве строка прайса 200 штук
                 //console.log("---lenth ", csvData[i].length);
             }
@@ -73,111 +71,62 @@ export async function GET(Request, Response) {
             for (let k = 0; k < csvData.length - 1; k++) {
                 //for (let k = 0; k < 200; k++) {
                 if (csvData[k].length == 41) {
-                    console.log("csvData[k]-------------", csvData[k]);
-                   // for (let t = 0; t < csvData[k].length; t++) {
-                        try {
-                            //  for (let t = 0; t < 100; t++) {
-                            const priceString = {
+                    //console.log("csvData[k]-------------", csvData[k]);
+                    // for (let t = 0; t < csvData[k].length; t++) {
+                    try {
+                        //  for (let t = 0; t < 100; t++) {
+                        const priceString = {
+                            _id: csvData[k][0],
+                            IE_NAME: csvData[k][1],
+                            IE_PREVIEW_TEXT: csvData[k][2],
+                            IE_DETAIL_PICTURE:
+                                "http://www.lutner.ru" + csvData[k][3],
+                            CP_QUANTITY: csvData[k][4], //Остаток
+                            IP_PROP134: csvData[k][5], //Количество струн
+                            IP_PROP140: csvData[k][6], //Актуальность товара (Снят с производства)
+                            IP_PROP113: csvData[k][7], //Тип губной гармошки
+                            IP_PROP112: csvData[k][8], //Количество частей у блок-флейт
+                            IP_PROP114: csvData[k][9], //Производитель
+                            IP_PROP111: csvData[k][10], //Тип блок-флейты
+                            IP_PROP121: csvData[k][11], //Цвет1
+                            IP_PROP96: csvData[k][12], //Артикул
+                            IP_PROP99: csvData[k][13], //Единица измерения
+                            IP_PROP127: csvData[k][14], //Не используется
+                            IP_PROP100: csvData[k][15], //Ставка НДС
+                            IP_PROP97: csvData[k][16], //Не используется
+                            IP_PROP95: csvData[k][17], //Штрих код
+                            IP_PROP122: csvData[k][18], //Верхняя дека
+                            IP_PROP123: csvData[k][19], //Тональность
+                            IP_PROP149: csvData[k][20], //Не используется
+                            IP_PROP106: csvData[k][21], //вес брутто
+                            IP_PROP107: csvData[k][22], //Объем
+                            IP_PROP165: csvData[k][23], //Мощность
+                            IP_PROP110: csvData[k][24], //Высота звучания
+                            IC_GROUP0: csvData[k][25], //Группа1
+                            IC_GROUP1: csvData[k][26], //Группа2
+                            IC_GROUP2: csvData[k][27], //Группа3
+                            IP_PROP131: csvData[k][28], //Размер
+                            IP_PROP142: csvData[k][29], //Ширина верхнего порожка
+                            IP_PROP153: csvData[k][30], //Диаметр
+                            IP_PROP139: csvData[k][31], //Цвет2
+                            CV_PRICE_13: csvData[k][32], //Цена дилер
+                            IP_PROP152: csvData[k][33], //Материал обмотки
+                            CV_CURRENCY_13: csvData[k][34], //Валюта
+                            IP_PROP176: csvData[k][35], //Хит продаж
+                            IP_PROP150: csvData[k][36], //Диаметр первой струны
+                            CV_PRICE_18: csvData[k][37], //Цена розница
+                            CV_CURRENCY_18: csvData[k][38], //Валюта
+                            CV_PRICE_20: csvData[k][39], //Цена МП
+                            CV_CURRENCY_20: csvData[k][40], //Валюта
+                        };
+                        arrayOfObjectForMongoDB.push(priceString);
 
-                                _id: csvData[k][0],
-                                IE_NAME: csvData[k][1],
-                                IE_PREVIEW_TEXT: csvData[k][2],
-                                IE_DETAIL_PICTURE:
-                                    "http://www.lutner.ru" + csvData[k][3],
-                                CP_QUANTITY: csvData[k][4], //Остаток
-                                IP_PROP134: csvData[k][5], //Количество струн
-                                IP_PROP140: csvData[k][6], //Актуальность товара (Снят с производства)
-                                IP_PROP113: csvData[k][7], //Тип губной гармошки
-                                IP_PROP112: csvData[k][8], //Количество частей у блок-флейт
-                                IP_PROP114: csvData[k][9], //Производитель
-                                IP_PROP111: csvData[k][10], //Тип блок-флейты
-                                IP_PROP121: csvData[k][11], //Цвет1
-                                IP_PROP96: csvData[k][12], //Артикул
-                                IP_PROP99: csvData[k][13], //Единица измерения
-                                IP_PROP127: csvData[k][14], //Не используется
-                                IP_PROP100: csvData[k][15], //Ставка НДС
-                                IP_PROP97: csvData[k][16], //Не используется
-                                IP_PROP95: csvData[k][17], //Штрих код
-                                IP_PROP122: csvData[k][18], //Верхняя дека
-                                IP_PROP123: csvData[k][19], //Тональность
-                                IP_PROP149: csvData[k][20], //Не используется
-                                IP_PROP106: csvData[k][21], //вес брутто
-                                IP_PROP107: csvData[k][22], //Объем
-                                IP_PROP165: csvData[k][23], //Мощность
-                                IP_PROP110: csvData[k][24], //Высота звучания
-                                IC_GROUP0: csvData[k][25], //Группа1
-                                IC_GROUP1: csvData[k][26], //Группа2
-                                IC_GROUP2: csvData[k][27], //Группа3
-                                IP_PROP131: csvData[k][28], //Размер
-                                IP_PROP142: csvData[k][29], //Ширина верхнего порожка
-                                IP_PROP153: csvData[k][30], //Диаметр
-                                IP_PROP139: csvData[k][31], //Цвет2
-                                CV_PRICE_13: csvData[k][32], //Цена дилер
-                                IP_PROP152: csvData[k][33], //Материал обмотки
-                                CV_CURRENCY_13: csvData[k][34], //Валюта
-                                IP_PROP176: csvData[k][35], //Хит продаж
-                                IP_PROP150: csvData[k][36], //Диаметр первой струны
-                                CV_PRICE_18: csvData[k][37], //Цена розница
-                                CV_CURRENCY_18: csvData[k][38], //Валюта
-                                CV_PRICE_20: csvData[k][39], //Цена МП
-                                CV_CURRENCY_20: csvData[k][40], //Валюта
-
-                                // _id: csvData[t][0],
-                                // IE_NAME: csvData[t][1],
-                                // IE_PREVIEW_TEXT: csvData[t][2],
-                                // IE_DETAIL_PICTURE:
-                                //     "http://www.lutner.ru" + csvData[t][3],
-                                // CP_QUANTITY: csvData[t][4], //Остаток
-                                // IP_PROP134: csvData[t][5], //Количество струн
-                                // IP_PROP140: csvData[t][6], //Актуальность товара (Снят с производства)
-                                // IP_PROP113: csvData[t][7], //Тип губной гармошки
-                                // IP_PROP112: csvData[t][8], //Количество частей у блок-флейт
-                                // IP_PROP114: csvData[t][9], //Производитель
-                                // IP_PROP111: csvData[t][10], //Тип блок-флейты
-                                // IP_PROP121: csvData[t][11], //Цвет1
-                                // IP_PROP96: csvData[t][12], //Артикул
-                                // IP_PROP99: csvData[t][13], //Единица измерения
-                                // IP_PROP127: csvData[t][14], //Не используется
-                                // IP_PROP100: csvData[t][15], //Ставка НДС
-                                // IP_PROP97: csvData[t][16], //Не используется
-                                // IP_PROP95: csvData[t][17], //Штрих код
-                                // IP_PROP122: csvData[t][18], //Верхняя дека
-                                // IP_PROP123: csvData[t][19], //Тональность
-                                // IP_PROP149: csvData[t][20], //Не используется
-                                // IP_PROP106: csvData[t][21], //вес брутто
-                                // IP_PROP107: csvData[t][22], //Объем
-                                // IP_PROP165: csvData[t][23], //Мощность
-                                // IP_PROP110: csvData[t][24], //Высота звучания
-                                // IC_GROUP0: csvData[t][25], //Группа1
-                                // IC_GROUP1: csvData[t][26], //Группа2
-                                // IC_GROUP2: csvData[t][27], //Группа3
-                                // IP_PROP131: csvData[t][28], //Размер
-                                // IP_PROP142: csvData[t][29], //Ширина верхнего порожка
-                                // IP_PROP153: csvData[t][30], //Диаметр
-                                // IP_PROP139: csvData[t][31], //Цвет2
-                                // CV_PRICE_13: csvData[t][32], //Цена дилер
-                                // IP_PROP152: csvData[t][33], //Материал обмотки
-                                // CV_CURRENCY_13: csvData[t][34], //Валюта
-                                // IP_PROP176: csvData[t][35], //Хит продаж
-                                // IP_PROP150: csvData[t][36], //Диаметр первой струны
-                                // CV_PRICE_18: csvData[t][37], //Цена розница
-                                // CV_CURRENCY_18: csvData[t][38], //Валюта
-                                // CV_PRICE_20: csvData[t][39], //Цена МП
-                                // CV_CURRENCY_20: csvData[t][40], //Валюта
-                            };
-                            arrayOfObjectForMongoDB.push(priceString);
-
-                            // console.log("priceString--", priceString);
-                            // }
-                        } catch (error) {
-                            console.log(
-                                "error-----",
-                                error,
-                                "--->",
-                                csvData[k]
-                            );
-                        }
-                   // }
+                        // console.log("priceString--", priceString);
+                        // }
+                    } catch (error) {
+                        console.log("error-----", error, "--->", csvData[k]);
+                    }
+                    // }
                 }
             }
 
@@ -201,6 +150,11 @@ export async function GET(Request, Response) {
         //сделать возврат результата на вызывающую страницу
         // redirect(`/admin/upload?p=${dat}`);
         //redirect("/admin/upload");
+
+        //----------------
+        //----------------
+        //----------------
+        //счетчик загруженных товаров в базе
     } else if (query == "count") {
         //запрос количеста товаров
 
@@ -211,8 +165,6 @@ export async function GET(Request, Response) {
         const collectionCount = dbCount.collection("pricecollection");
 
         resultCount = await collectionCount.estimatedDocumentCount();
-
-        //console.log("result-------------------->>>", resultCount);
 
         await clientCount.close();
 
@@ -229,12 +181,19 @@ export async function GET(Request, Response) {
                 },
             }
         );
-    } else if (query == "catalog") {
+
+        //----------------
+        //----------------
+        //----------------
+        //создание каталога меню на основе прайса
+    } else if (query == "createCatalog") {
         const client = await MongoClient.connect(process.env.dbConnect);
         const db = client.db();
         const collection = db.collection("pricecollection");
 
         const catalog_1_level = await collection.distinct("IC_GROUP0");
+
+        let Catalog = new Array();
 
         for (let index = 0; index < catalog_1_level.length; index++) {
             const catalog_2_level = await collection.distinct("IC_GROUP1", {
@@ -253,22 +212,64 @@ export async function GET(Request, Response) {
                     "catalog_3_level--->",
                     catalog_3_level[index_2]
                 );
+                Catalog.push({
+                    first: catalog_1_level[index],
+                    second: catalog_2_level[index_2],
+                    thyrd: catalog_3_level[index_2],
+                });
             }
-
-            // console.log(
-            //     "catalog_1_level------> ",
-            //     catalog_1_level[index],
-            //     "catalog_2_level--->",
-            //     catalog_2_level
-            // );
         }
+
+        //console.log("Catalog ---> ", Catalog);
+
+        //const client = await MongoClient.connect(process.env.dbConnect);
+        //  const db = client.db();
+        const collectionCatalog = db.collection("catalogcollection");
+
+        //сначала удаляем все потом загружаем заново
+        const result = await collectionCatalog.deleteMany({});
+        if (result) {
+            const resultInsert = await collectionCatalog.insertMany(Catalog);
+        }
+
+        await client.close();
+
+        return new NextResponse(
+            JSON.stringify({ Success: true, message: "result" }),
+            {
+                status: 200,
+                headers: {
+                    "content-type": "application/json",
+                },
+            }
+        );
+
+        //----------------
+        //----------------
+        //----------------
+        //получить весь каталог для создания меню на странице
+    } else if (query == "getCatalog") {
+        const client = await MongoClient.connect(process.env.dbConnect);
+        const db = client.db();
+        const collectionCatalog = db.collection("catalogcollection");
+
+        const result = await collectionCatalog
+           // .find({})
+           .distinct("first")
+            // .toArray(function (err, result) {
+            //     if (err) throw err;
+            //     //console.log("result--------->", result);
+            //     db.close();
+            // });
+
+        console.log("result-----", result);
 
         // console.log("result-----", result);
 
         await client.close();
 
         return new NextResponse(
-            JSON.stringify({ Success: true, message: "result" }),
+            JSON.stringify({ Success: true, message: result }),
             {
                 status: 200,
                 headers: {

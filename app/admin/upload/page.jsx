@@ -16,11 +16,6 @@ const upload = () => {
             // body: formData,
         });
 
-        // console.log(
-        //     "responseCount-----===",
-        //     responseCount.headers.get("countItems")
-        // );
-
         if (responseCount.status == 200) {
             setCount(
                 "В базе товаров " + responseCount.headers.get("countItems")
@@ -34,6 +29,8 @@ const upload = () => {
         getCountItems();
     }, [result]);
 
+
+    //загрузка прайса
     async function onSubmit(FormEvent) {
         FormEvent.preventDefault();
 
@@ -52,6 +49,27 @@ const upload = () => {
         }
     }
 
+
+    //созлание каталога на основе загруженного прайса
+    async function onSubmitCatalog(FormEvent) {
+        FormEvent.preventDefault();
+
+        //const formData = new FormData(FormEvent.currentTarget);
+        const response = await fetch("/api/catalog?type=createCatalog", {
+            method: "GET",
+        });
+
+        //console.log("response-----===", response);
+
+        if (response.status == 200) {
+            setResult("Каталог создан");
+            //getCountItems();
+        } else {
+            setResult("Каталог не создан. Ошибка(");
+        }
+    }
+
+    //удаление всего прайса
     async function onSubmitDelete(FormEvent) {
         FormEvent.preventDefault();
 
@@ -82,6 +100,16 @@ const upload = () => {
                         Upload price
                     </button>
                 </form>
+
+                <form onSubmit={onSubmitCatalog}>
+                    <button
+                        type="submit"
+                        className="ml-14 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                        Create catalog
+                    </button>
+                </form>
+
                 <span>
                     {result} {count}
                 </span>
@@ -100,9 +128,3 @@ const upload = () => {
 };
 
 export default upload;
-
-// export function setValue(params) {
-
-//     console.log("45454")
-
-// }
