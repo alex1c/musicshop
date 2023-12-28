@@ -195,32 +195,64 @@ export async function GET(Request, Response) {
 
         let Catalog = new Array();
 
+        let Menu = {};
+
         for (let index = 0; index < catalog_1_level.length; index++) {
             const catalog_2_level = await collection.distinct("IC_GROUP1", {
                 IC_GROUP0: catalog_1_level[index],
             });
+            (Menu.firstLevel = catalog_1_level[index]),
+                (Menu.secondLevel = { sec: catalog_2_level });
 
-            for (let index_2 = 0; index_2 < catalog_2_level.length; index_2++) {
+            for (
+                let index_2 = 0;
+                index_2 < Menu.secondLevel.sec.length;
+                index_2++
+            ) {
+                // const element = array[_2];
+                // console.log("----------", Menu.secondLevel.sec[index_2]);
+
                 const catalog_3_level = await collection.distinct("IC_GROUP2", {
-                    IC_GROUP1: catalog_2_level[index_2],
+                    IC_GROUP1: Menu.secondLevel.sec[index_2],
                 });
-                console.log(
-                    "catalog_1_level------> ",
-                    catalog_1_level[index],
-                    "catalog_2_level--->",
-                    catalog_2_level[index_2],
-                    "catalog_3_level--->",
-                    catalog_3_level[index_2]
-                );
-                Catalog.push({
-                    first: catalog_1_level[index],
-                    second: catalog_2_level[index_2],
-                    thyrd: catalog_3_level[index_2],
-                });
+                // console.log("catalog_3_level--", catalog_3_level);
+                if (Array.isArray(Menu.secondLevel.sec[index_2])) {
+                    Menu.secondLevel.sec[index_2].push = {
+                        third: catalog_3_level,
+                    };
+                }
             }
-        }
 
-        //console.log("Catalog ---> ", Catalog);
+            Catalog.push(Menu);
+        }
+        console.log("menu--", Catalog);
+
+        // for (let index = 0; index < catalog_1_level.length; index++) {
+        //     const catalog_2_level = await collection.distinct("IC_GROUP1", {
+        //         IC_GROUP0: catalog_1_level[index],
+        //     });
+
+        //     for (let index_2 = 0; index_2 < catalog_2_level.length; index_2++) {
+        //         const catalog_3_level = await collection.distinct("IC_GROUP2", {
+        //             IC_GROUP1: catalog_2_level[index_2],
+        //         });
+        //         console.log(
+        //             "catalog_1_level------> ",
+        //             catalog_1_level[index],
+        //             "catalog_2_level--->",
+        //             catalog_2_level[index_2],
+        //             "catalog_3_level--->",
+        //             catalog_3_level[index_2]
+        //         );
+        //         Catalog.push({
+        //             first: catalog_1_level[index],
+        //             second: catalog_2_level[index_2],
+        //             thyrd: catalog_3_level[index_2],
+        //         });
+        //     }
+        // }
+
+        console.log("Catalog ---> ", Catalog);
 
         //const client = await MongoClient.connect(process.env.dbConnect);
         //  const db = client.db();
@@ -254,13 +286,13 @@ export async function GET(Request, Response) {
         const collectionCatalog = db.collection("catalogcollection");
 
         const result = await collectionCatalog
-           // .find({})
-           .distinct("first")
-            // .toArray(function (err, result) {
-            //     if (err) throw err;
-            //     //console.log("result--------->", result);
-            //     db.close();
-            // });
+            // .find({})
+            .distinct("first");
+        // .toArray(function (err, result) {
+        //     if (err) throw err;
+        //     //console.log("result--------->", result);
+        //     db.close();
+        // });
 
         console.log("result-----", result);
 
